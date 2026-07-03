@@ -26,12 +26,17 @@ export default function Home() {
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
   const [signedInUser, setSignedInUser] = useState("");
+  const [showUsername, setShowUsername] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Contacts list
   const [usersList, setUsersList] = useState<Friend[]>([]);
   const [assistantMsgCount, setAssistantMsgCount] = useState<number>(0);
   const [activeRecipient, setActiveRecipient] = useState<string>("Assistant");
   const [activeRecipientName, setActiveRecipientName] = useState<string>("Assistant");
+
+  // Mobile sidebar visibility
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Unread message tracking (last viewed message count for each recipient)
   const [lastViewedCounts, setLastViewedCounts] = useState<Record<string, number>>(() => {
@@ -138,6 +143,17 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [isLoggedIn, signedInUser]);
+
+  // Close the mobile sidebar automatically when returning to desktop width
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Fetch list of all registered users in database along with message counts
   const fetchUsersList = async (currentUsername: string) => {
@@ -268,6 +284,7 @@ export default function Home() {
     setUsersList([]);
     setActiveRecipient("Assistant");
     setActiveRecipientName("Assistant");
+    setSidebarOpen(false);
     localStorage.removeItem("chatbot_username");
   };
 
@@ -277,6 +294,13 @@ export default function Home() {
     setTheme(newTheme);
     localStorage.setItem("chatbot_theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
+  // Select a contact/thread and close the mobile sidebar drawer
+  const handleSelectRecipient = (usernameKey: string, displayName: string) => {
+    setActiveRecipient(usernameKey);
+    setActiveRecipientName(displayName);
+    setSidebarOpen(false);
   };
 
   // Clear Chat History (deletes from database)
@@ -444,28 +468,54 @@ export default function Home() {
             
             <div className={styles.authFormGroup}>
               <label htmlFor="username" className={styles.authLabel}>Username</label>
-              <input
-                id="username"
-                type="text"
-                value={usernameInput}
-                onChange={(e) => setUsernameInput(e.target.value)}
-                placeholder="Enter username (min. 3 chars)"
-                className={styles.authInput}
-                required
-              />
+              <div className={styles.authInputWrapper}>
+                <input
+                  id="username"
+                  type={showUsername ? "text" : "password"}
+                  value={usernameInput}
+                  onChange={(e) => setUsernameInput(e.target.value)}
+                  placeholder="Enter username (min. 3 chars)"
+                  className={styles.authInput}
+                  autoComplete="username"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowUsername((prev) => !prev)}
+                  className={styles.authInputToggle}
+                  aria-label={showUsername ? "Hide username" : "Show username"}
+                  aria-pressed={showUsername}
+                  tabIndex={-1}
+                >
+                  {showUsername ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
 
             <div className={styles.authFormGroup}>
               <label htmlFor="password" className={styles.authLabel}>Password</label>
-              <input
-                id="password"
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="Enter password (min. 4 chars)"
-                className={styles.authInput}
-                required
-              />
+              <div className={styles.authInputWrapper}>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="Enter password (min. 4 chars)"
+                  className={styles.authInput}
+                  autoComplete="current-password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className={styles.authInputToggle}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  tabIndex={-1}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
 
             <button type="submit" className={styles.btnAuthSubmit}>
@@ -491,8 +541,17 @@ export default function Home() {
   // 2. MAIN CHAT WORKSPACE (FORMAL THEME)
   return (
     <div className={styles.container}>
+      {/* Mobile overlay backdrop, closes sidebar when tapped */}
+      {sidebarOpen && (
+        <div
+          className={styles.sidebarOverlay}
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* SIDEBAR */}
-      <aside className={styles.sidebar}>
+      <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ""}`}>
         <div className={styles.sidebarContent}>
           <div className={styles.sidebarHeader}>
             <div className={styles.sidebarLogo}>C</div>
@@ -503,10 +562,7 @@ export default function Home() {
           <div>
             <h3 className={styles.sectionTitle}>Assistant</h3>
             <button
-              onClick={() => {
-                setActiveRecipient("Assistant");
-                setActiveRecipientName("Assistant");
-              }}
+              onClick={() => handleSelectRecipient("Assistant", "Assistant")}
               className={`${styles.contactItem} ${
                 activeRecipient === "Assistant" ? styles.contactItemActive : ""
               }`}
@@ -535,10 +591,7 @@ export default function Home() {
                   return (
                     <button
                       key={user.usernameKey}
-                      onClick={() => {
-                        setActiveRecipient(user.usernameKey);
-                        setActiveRecipientName(user.username);
-                      }}
+                      onClick={() => handleSelectRecipient(user.usernameKey, user.username)}
                       className={`${styles.contactItem} ${
                         activeRecipient === user.usernameKey ? styles.contactItemActive : ""
                       }`}
@@ -618,13 +671,23 @@ export default function Home() {
       {/* CHAT MAIN PANEL */}
       <main className={styles.chatArea}>
         <header className={styles.chatHeader}>
-          <div>
-            <h2 className={styles.chatHeaderTitle}>{activeRecipientName}</h2>
-            <span className={styles.chatHeaderSub}>
-              {activeRecipient === "Assistant"
-                ? `Chatting with Workspace Assistant Bot • ${messages.length} messages`
-                : `Private chat thread with ${activeRecipientName} • ${messages.length} messages`}
-            </span>
+          <div className={styles.chatHeaderLeft}>
+            <button
+              className={styles.menuToggle}
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Toggle contacts sidebar"
+              aria-expanded={sidebarOpen}
+            >
+              ☰
+            </button>
+            <div>
+              <h2 className={styles.chatHeaderTitle}>{activeRecipientName}</h2>
+              <span className={styles.chatHeaderSub}>
+                {activeRecipient === "Assistant"
+                  ? `Chatting with Workspace Assistant Bot • ${messages.length} messages`
+                  : `Private chat thread with ${activeRecipientName} • ${messages.length} messages`}
+              </span>
+            </div>
           </div>
         </header>
 

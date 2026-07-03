@@ -1,0 +1,18 @@
+# Keep local node_modules from being uploaded
+node_modules/
+
+# Keep local Next.js build cache from being uploaded
+.next/
+
+# Keep environment variables secret and local
+.env*.local
+.env
+
+# Version control
+.git/
+.gitignore
+
+# Other build outputs and logs
+build/
+dist/
+*.log

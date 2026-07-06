@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import clientPromise, { dbName } from "@/lib/mongodb";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
@@ -15,7 +18,7 @@ export async function GET(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("chatbotDB");
+    const db = client.db(dbName);
     const messagesCollection = db.collection("messages");
 
     const normSender = sender.trim().toLowerCase();
@@ -83,7 +86,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("chatbotDB");
+    const db = client.db(dbName);
     const messagesCollection = db.collection("messages");
 
     const normSender = activeSender.trim().toLowerCase();
@@ -191,7 +194,7 @@ export async function DELETE(request: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("chatbotDB");
+    const db = client.db(dbName);
     const messagesCollection = db.collection("messages");
 
     const normSender = sender.trim().toLowerCase();

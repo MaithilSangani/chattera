@@ -1,73 +1,75 @@
 :root {
-  /* Formal Design System - Light Mode default */
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --foreground-muted: #475569;
+  /* Chattera - Light Mode Design System */
+  --background: linear-gradient(135deg, #eae9f2 0%, #e2e1f0 100%);
+  --background-fallback: #eae9f2;
+  --foreground: #1c1926;
+  --foreground-muted: #696575;
   
-  --sidebar-bg: #0f172a; /* Deep Slate sidebar for contrast */
-  --sidebar-fg: #f8fafc;
-  --sidebar-muted: #94a3b8;
-  --sidebar-border: #1e293b;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.08);
-  --sidebar-item-active: rgba(255, 255, 255, 0.15);
+  --sidebar-bg: #15131e; /* Dark slate-violet sidebar matching the mockup */
+  --sidebar-fg: #ffffff;
+  --sidebar-muted: #8e8a9f;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.05);
+  --sidebar-item-active: #2b2839;
   
   --card-bg: #ffffff;
-  --border-color: #e2e8f0;
-  --border-hover-color: #cbd5e1;
+  --border-color: #eaeef5;
+  --border-hover-color: #dbe2ef;
   
-  --primary: #2563eb; /* Corporate Blue */
-  --primary-hover: #1d4ed8;
-  --primary-light: #eff6ff;
-  --primary-glow: rgba(37, 99, 235, 0.1);
+  --primary: #7c3aed; /* Violet Brand Color */
+  --primary-hover: #6d28d9;
+  --primary-light: #f5f3ff;
+  --primary-glow: rgba(124, 58, 237, 0.15);
   
-  --chat-bubble-user: #2563eb;
-  --chat-bubble-user-text: #ffffff;
-  --chat-bubble-bot: #f1f5f9;
-  --chat-bubble-bot-text: #0f172a;
+  --chat-bubble-user: #e3efff; /* Light blue/purple bubble for outgoing messages */
+  --chat-bubble-user-text: #1e293b;
+  --chat-bubble-bot: #ffffff; /* White bubble for incoming messages */
+  --chat-bubble-bot-text: #1c1926;
   
-  --input-bg: #ffffff;
-  --input-border: #e2e8f0;
-  --input-focus-border: #2563eb;
+  --input-bg: #f4f3f8;
+  --input-border: #e2e1ec;
+  --input-focus-border: #7c3aed;
   
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-heading: var(--font-outfit), system-ui, -apple-system, sans-serif;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px -5px rgba(28, 25, 38, 0.08), 0 8px 10px -6px rgba(28, 25, 38, 0.08);
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s ease;
 }
 
 [data-theme="dark"] {
-  /* Formal Design System - Dark Mode */
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --foreground-muted: #94a3b8;
+  /* Chattera - Dark Mode Design System */
+  --background: #0d0b14;
+  --background-fallback: #0d0b14;
+  --foreground: #eae9f2;
+  --foreground-muted: #9592a3;
   
-  --sidebar-bg: #020617;
-  --sidebar-fg: #f8fafc;
-  --sidebar-muted: #64748b;
-  --sidebar-border: #1e293b;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.05);
-  --sidebar-item-active: rgba(255, 255, 255, 0.1);
+  --sidebar-bg: #09080e;
+  --sidebar-fg: #ffffff;
+  --sidebar-muted: #5e5a6f;
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.03);
+  --sidebar-item-active: #15131e;
   
-  --card-bg: #1e293b;
-  --border-color: #334155;
-  --border-hover-color: #475569;
+  --card-bg: #15131e;
+  --border-color: #232030;
+  --border-hover-color: #2e2a3f;
   
-  --primary: #3b82f6;
-  --primary-hover: #60a5fa;
-  --primary-light: rgba(59, 130, 246, 0.1);
-  --primary-glow: rgba(59, 130, 246, 0.25);
+  --primary: #9f67ff;
+  --primary-hover: #8b46ff;
+  --primary-light: rgba(159, 103, 255, 0.1);
+  --primary-glow: rgba(159, 103, 255, 0.25);
   
-  --chat-bubble-user: #2563eb;
-  --chat-bubble-user-text: #ffffff;
-  --chat-bubble-bot: #1e293b;
-  --chat-bubble-bot-text: #f1f5f9;
+  --chat-bubble-user: #1d2b45;
+  --chat-bubble-user-text: #eae9f2;
+  --chat-bubble-bot: #232030;
+  --chat-bubble-bot-text: #eae9f2;
   
-  --input-bg: #1e293b;
-  --input-border: #334155;
-  --input-focus-border: #3b82f6;
+  --input-bg: #09080e;
+  --input-border: #232030;
+  --input-focus-border: #9f67ff;
 }
 
 * {

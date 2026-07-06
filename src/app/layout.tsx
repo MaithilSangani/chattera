@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AuraAI - Intelligent Conversational Engine",
-  description: "Experience the premium AI chat platform designed for lightning-fast answers and stunning interactions.",
+  title: "Chattera - Premium Conversation Platform",
+  description: "Experience Chattera, the premium AI and private messaging platform designed for team communication and lightning-fast collaboration.",
 };
 
 export default function RootLayout({
